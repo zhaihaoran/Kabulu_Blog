@@ -1,0 +1,25 @@
+{
+  "name": "kabulu",
+  "version": "1.0.0",
+  "description": "blog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhaihaoran/Kabulu_Blog.git"
+  },
+  "keywords": [
+    "blog",
+    "javascript",
+    "go",
+    "python"
+  ],
+  "author": "zhaihaoran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhaihaoran/Kabulu_Blog/issues"
+  },
+  "homepage": "https://github.com/zhaihaoran/Kabulu_Blog#readme"
+}
