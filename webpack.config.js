@@ -1,13 +1,27 @@
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+// var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var path = require('path')
+
+function resolve(dir) {
+    return path.join(__dirname,dir)
+}
 
 module.exports = {
-    entry: __dirname + '/app/main.js',
+    entry: resolve('app/main.js'),
     output: {
-        path: __dirname + "/build", // 指定打包之后的文件夹 
+        path: resolve("build"), // 指定打包之后的文件夹 
         // publicPath: '/public/', // 指定资源文件引用的目录
         filename: 'bundle-[hash:5].js'
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.json','.less'],
+        alias: {
+          // 只是起一个别名，为了减少复杂度
+          // 后续调用就可以这样了 
+          // import A from '@/components/a.vue'
+          '@': resolve('app')
+        }
     },
     // 生成sourcemap方便快速定位问题
     devtool: 'eval-source-map',
@@ -24,21 +38,28 @@ module.exports = {
             use: {
                 loader: 'babel-loader',
             },
-            exclude: /node_modules/
+            exclude: /node_modules/,
+            include: [resolve('app')],
         },{
-            test: /\.css$/,
+            test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+            loader: 'url-loader',
+            options: {
+                limit: 10000,
+            }
+        },{
+            test: /\.(css|less)$/,
             use: [
                 {
                     loader: "style-loader"
                 }, {
                     loader: "css-loader",
-                    options: {
-                        modules: true
-                    }
-                }, {
-                    loader: "postcss-loader"
+                    // options: {
+                    //     modules: true
+                    // }
+                },{
+                    loader: "less-loader"
                 }
-            ]
+            ],
         }]
     },
     plugins: [
@@ -47,8 +68,8 @@ module.exports = {
             template: __dirname + '/app/index.tmpl.html' // new 一个这个插件的实例，并传入相关的参数
         }),
         // 优化用的
-        new webpack.optimize.OccurrenceOrderPlugin(), //组件分配id 通过分析使用最多的模块，为他们分配最小的id
+        // new webpack.optimize.OccurrenceOrderPlugin(), //组件分配id 通过分析使用最多的模块，为他们分配最小的id
         new webpack.optimize.UglifyJsPlugin(), //压缩js代码
-        new ExtractTextPlugin("style.css") // 分离css和js文件
+        // new ExtractTextPlugin("style.css") // 分离css和js文件
     ]
 }
